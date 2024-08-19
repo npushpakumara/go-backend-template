@@ -43,7 +43,7 @@ var defaultConfigs = map[string]interface{}{
 
 	// db.pass represents the password used for authentication with the database server.
 	// Default value is "root".
-	"db.pass": "root",
+	"db.password": "root",
 
 	// db.name is the name of the database to which the application will connect.
 	// Default value is "test".

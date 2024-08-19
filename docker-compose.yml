@@ -1,0 +1,45 @@
+services:
+  # Application service
+  app:
+    # Build the Docker image from the Dockerfile in the current directory
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    container_name: server  # Name of the container for the application service
+    restart: always
+    env_file:
+      - .env  # Load environment variables from the .env file
+    ports:
+      # Map the application port from host to container
+      - "${MYAPP_SERVER_PORT:-4000}:${MYAPP_SERVER_PORT:-4000}"
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+    user: nonroot:nonroot  # Run the container with a non-root user
+
+  # PostgreSQL service
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres  # Name of the container for the PostgreSQL service
+    restart: always
+    environment:
+      # Set environment variables for PostgreSQL
+      POSTGRES_USER: ${MYAPP_DB_USER}  # Database user
+      POSTGRES_PASSWORD: ${MYAPP_DB_PASSWORD}  # Database password
+      POSTGRES_DB: ${MYAPP_DB_NAME}  # Database name
+    volumes:
+      # Mount a volume for persistent data storage
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  # Define the application network
+  app-network:
+    driver: bridge  # Use the bridge driver for the network
+
+volumes:
+  # Define the volume for PostgreSQL data storage
+  postgres-data:
+    driver: local  # Use the local driver for volume storage

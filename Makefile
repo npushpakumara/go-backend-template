@@ -1,72 +1,63 @@
-# Variables
+# Go application variables
 APP_NAME := server
-GO_FILES := $(shell find . -name '*.go' -type f)
+MODULE_NAME := $(shell go list -m)
 BUILD_DIR := build
-BINARY := $(BUILD_DIR)/$(APP_NAME)
-MODULE := $(shell go list -m)
+SRC_DIR := .
+GO_FILES := $(shell find $(SRC_DIR) -name '*.go')
 
-# Default target
-.PHONY: all
+# Docker variables
+DOCKER_IMAGE := backend-api:latest
+
+# Default target: build the Go application
 all: build
 
-# Help target
-.PHONY: help
-help:
-	@echo "Usage: make [target]"
-	@echo ""
-	@echo "Targets:"
-	@echo "  all           Build the application (default)"
-	@echo "  clean         Clean up the build directory"
-	@echo "  fmt           Run go fmt on all source files"
-	@echo "  vet           Run go vet on all source files"
-	@echo "  lint          Run go lint on all source files"
-	@echo "  test          Run tests"
-	@echo "  build         Build the application"
-	@echo "  run           Run the application"
-	@echo "  validate      Run fmt, vet, lint, test, and build"
-	@echo "  docker        Build a Docker image for the application"
-	@echo "  docker-run    Run the application in a Docker container"
-	@echo "  help          Show this help message"
+# Build the Go application
+build: $(BIN_DIR)/$(APP_NAME)
 
-# Clean up the build directory
-.PHONY: clean
+$(BIN_DIR)/$(APP_NAME): $(GO_FILES)
+	@mkdir -p $(BIN_DIR)
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o $(BIN_DIR)/$(APP_NAME) $(MODULE_NAME)/cmd/server
+
+# Clean the binary and other build artifacts
 clean:
-	rm -rf $(BUILD_DIR)
+	@rm -rf $(BIN_DIR)
 
-# Run go fmt on all source files
-.PHONY: fmt
-fmt:
-	go fmt ./...
+# Docker build
+docker-build:
+	docker build -t $(DOCKER_IMAGE) .
 
-# Run go vet on all source files
-.PHONY: vet
-vet:
-	go vet ./...
+# Docker Compose up
+docker-compose-up:
+	@docker compose up -d
 
-# Run go lint (you need to install golint first)
-.PHONY: lint
+# Docker Compose down
+docker-compose-down:
+	@docker compose down
+
+# Lint the Go code
 lint:
-	golangci-lint run ./...
+	@golangci-lint run
 
-# Run tests
-.PHONY: test
-test:
-	go test -v ./...
+# Format the Go code
+fmt:
+	@go fmt ./...
 
-# Build the application
-.PHONY: build
-build: clean
-	@echo "Building $(APP_NAME)..."
-	@mkdir -p $(BUILD_DIR)
-	@go build -o $(BINARY) $(MODULE)/cmd/$(APP_NAME)
+# Detect race conditions
+race:
+	@go test -race ./...
 
-# Run the application
-.PHONY: run
-run: build
-	@echo "Running $(APP_NAME)..."
-	@$(BINARY)
+# Help message
+help:
+	@echo "Usage:"
+	@echo "  make                   Build the Go application (default target)"
+	@echo "  make build             Build the Go application"
+	@echo "  make clean             Clean the binary and other build artifacts"
+	@echo "  make docker-build      Build the Docker image"
+	@echo "  make docker-compose-up Start the application using Docker Compose"
+	@echo "  make docker-compose-down Stop the application using Docker Compose"
+	@echo "  make lint              Lint the Go code"
+	@echo "  make fmt               Format the Go code"
+	@echo "  make race              Detect race conditions"
+	@echo "  make help              Show this help message"
 
-# Run all (fmt, vet, lint, test, build)
-.PHONY: validate
-validate: fmt vet lint test build
-
+.PHONY: all build clean docker-build docker-compose-up docker-compose-down lint fmt race help

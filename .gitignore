@@ -60,7 +60,13 @@ Thumbs.db
 
 # Environment files
 *.env*
-
+!.env.test
 
 # Editor-specific backup files
 *~
+
+# Dev Docker files
+docker-compose.*.yml
+Dockerfile.*
+
+.air.toml

@@ -74,12 +74,10 @@ var k = koanf.New(".")
 // LoadConfig loads the application configuration from environment variables and default settings.
 // It initializes configuration using a default set of values and overrides them with environment variables.
 func LoadConfig() (*Config, error) {
-
 	// Load environment variables from a .env file into the application
 	err := godotenv.Load()
 	if err != nil {
-		log.Printf("Error loading .env file. err: %v", err)
-		return nil, err
+		log.Printf("Cannot load .env file. err: %v, continue using system variables", err)
 	}
 
 	// Load default configuration settings
