@@ -37,13 +37,16 @@ func (us *userServiceImpl) CreateUser(ctx context.Context, user *dto.RegisterReq
 		FirstName:   user.FirstName,
 		LastName:    user.LastName,
 		Email:       user.Email,
+		Password:    user.Password,
 		PhoneNumber: user.PhoneNumber,
 		Provider:    user.Provider,
 		ProviderID:  user.ProviderID,
 	}
 
-	if user.ProviderID == "" {
-		requestBody.Password = user.Password
+	// If the user is not an oauth user, then set the password
+	if user.ProviderID != "" {
+		requestBody.Password = ""
+		requestBody.IsActive = true
 	}
 
 	newUser, err := us.userRepository.Insert(ctx, requestBody)
