@@ -6,10 +6,11 @@ A clean architecture Go backend template built with Gin, PostgreSQL, GORM, and U
 
 - Clean architecture with separation of concerns
 - RESTful API using the Gin framework
-- PostgreSQL database with GORM ORM
+- PostgreSQL database with Gorm ORM
 - Dependency injection with Uber FX
 - Docker support for easy containerization
-- AWS integration for S3,SES,etc...
+- Sending emails using AWS SES
+- Oauth implementation with Goth
 
 ## Getting Started
 

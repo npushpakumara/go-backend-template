@@ -9,4 +9,11 @@ type RegisterRequestDto struct {
 	Email       string
 	Password    string
 	PhoneNumber string
+	Provider    string
+	ProviderID  string
+}
+
+type LoginRequestDto struct {
+	Email    string
+	Password string
 }

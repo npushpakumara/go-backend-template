@@ -52,7 +52,7 @@ func (as *authServiceImpl) RegisterUser(ctx context.Context, requestBody *dto.Si
 	}
 
 	// Register the user with the user service.
-	newUser, err := as.userService.Register(ctx, userPayload)
+	newUser, err := as.userService.CreateUser(ctx, userPayload)
 	if err != nil {
 		return err
 	}

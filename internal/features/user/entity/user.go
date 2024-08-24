@@ -16,6 +16,8 @@ type User struct {
 	Password    string    `gorm:"size:255"`
 	PhoneNumber string    `gorm:"size:20"`
 	IsActive    bool      `gorm:"type:boolean"`
+	Provider    string    `gorm:"size:20"`
+	ProviderID  string    `gorm:"size:100"`
 }
 
 // BeforeCreate is a GORM hook that is triggered before a new record is created in the database.
