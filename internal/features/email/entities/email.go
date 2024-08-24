@@ -1,5 +1,6 @@
 package entities
 
+// Email represents the structure of an email message.
 type Email struct {
 	From     string
 	To       []string
@@ -8,6 +9,8 @@ type Email struct {
 	Data     map[string]string
 }
 
+// EmailTemplates is a map that stores predefined email templates with their subjects and template names.
+// Each template is identified by a unique key, such as "UserVerification" or "PasswordReset".
 var EmailTemplates = map[string]struct {
 	Subject  string
 	Template string

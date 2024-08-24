@@ -62,7 +62,7 @@ type LoggingConfig struct {
 	Encoding string `json:"encoding"`
 }
 
-// AWSConfigs represents the configuration for AWS services
+// AWSConfig represents the configuration for AWS services
 type AWSConfig struct {
 	Region    string `json:"region"`
 	SESConfig struct {

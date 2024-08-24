@@ -11,8 +11,8 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// / UserRepository defines the interface for user-related data operations.
-type UserRepository interface {
+// Repository defines the interface for user-related data operations.
+type Repository interface {
 	// Insert adds a new user to the database.
 	// It returns the inserted user and an error if something goes wrong.
 	Insert(ctx context.Context, user *entity.User) (*entity.User, error)
@@ -30,13 +30,13 @@ type UserRepository interface {
 	Update(ctx context.Context, id string, updates map[string]interface{}) error
 }
 
-// userRepositoryImpl is a concrete implementation of the UserRepository interface.
+// userRepositoryImpl is a concrete implementation of the Repository interface.
 type userRepositoryImpl struct {
 	db *gorm.DB
 }
 
 // NewUserRepository creates a new instance of userRepositoryImpl with the provided database connection.
-func NewUserRepository(db *gorm.DB) UserRepository {
+func NewUserRepository(db *gorm.DB) Repository {
 	return &userRepositoryImpl{db}
 }
 

@@ -8,22 +8,22 @@ import (
 	"github.com/npushpakumara/go-backend-template/internal/postgres"
 )
 
-// UserService defines the methods that our User Service should implement.
-type UserService interface {
+// Service defines the methods that our User Service should implement.
+type Service interface {
 	CreateUser(ctx context.Context, user *dto.RegisterRequestDto) (*dto.UserResponseDto, error)
-	UpdateUser(ctx context.Context, userId string, updates map[string]interface{}) error
+	UpdateUser(ctx context.Context, userID string, updates map[string]interface{}) error
 	GetUserByID(ctx context.Context, userID string) (*dto.UserResponseDto, error)
 	GetUserByEmail(ctx context.Context, email string) (*dto.UserResponseDto, error)
 }
 
-// userServiceImpl is the concrete implementation of the UserService interface.
+// userServiceImpl is the concrete implementation of the Service interface.
 type userServiceImpl struct {
-	userRepository UserRepository
+	userRepository Repository
 }
 
-// NewUserService creates a new instance of userServiceImpl with the provided UserRepository.
+// NewUserService creates a new instance of userServiceImpl with the provided Repository.
 // This function initializes the user service with the repository it will use for data operations.
-func NewUserService(userRepository UserRepository, transactionManager postgres.TransactionManager) UserService {
+func NewUserService(userRepository Repository, transactionManager postgres.TransactionManager) Service {
 	return &userServiceImpl{userRepository}
 }
 
@@ -64,9 +64,9 @@ func (us *userServiceImpl) CreateUser(ctx context.Context, user *dto.RegisterReq
 }
 
 // UpdateUser updates the details of an existing user based on the userId and the updates map.
-func (us *userServiceImpl) UpdateUser(ctx context.Context, userId string, updates map[string]interface{}) error {
+func (us *userServiceImpl) UpdateUser(ctx context.Context, userID string, updates map[string]interface{}) error {
 
-	err := us.userRepository.Update(ctx, userId, updates)
+	err := us.userRepository.Update(ctx, userID, updates)
 	if err != nil {
 		return err
 	}

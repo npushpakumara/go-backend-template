@@ -83,8 +83,8 @@ func Run() {
 		// Invoke functions to set up routes and start the application.
 		fx.Invoke(
 			auth.NewOAuthProviders,
-			user.UserRouter,
-			auth.AuthRouter,
+			user.Router,
+			auth.Router,
 			func(r *gin.Engine) {},
 		),
 	)

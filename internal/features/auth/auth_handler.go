@@ -15,20 +15,20 @@ import (
 	"github.com/npushpakumara/go-backend-template/pkg/logging"
 )
 
-// / AuthHandler handles authentication-related requests
-type AuthHandler struct {
-	authService AuthService
+// Handler handles authentication-related requests
+type Handler struct {
+	authService Service
 	cfg         *config.Config // Configuration settings for the application
 }
 
-// NewAuthHandler creates a new instance of AuthHandler with the given AuthService
-func NewAuthHandler(authService AuthService, cfg *config.Config) *AuthHandler {
-	return &AuthHandler{authService, cfg}
+// NewAuthHandler creates a new instance of Handler with the given Service
+func NewAuthHandler(authService Service, cfg *config.Config) *Handler {
+	return &Handler{authService, cfg}
 }
 
-// AuthRouter sets up the routes for authentication-related API endpoints
+// Router sets up the routes for authentication-related API endpoints
 // It groups the routes under "api/v1/auth" and assigns handler functions to the routes
-func AuthRouter(router *gin.Engine, handler *AuthHandler, authMiddleware *jwt.GinJWTMiddleware) {
+func Router(router *gin.Engine, handler *Handler, authMiddleware *jwt.GinJWTMiddleware) {
 	v1 := router.Group("api/v1")
 
 	v1.Use()
@@ -55,7 +55,7 @@ func AuthRouter(router *gin.Engine, handler *AuthHandler, authMiddleware *jwt.Gi
 
 // signUpUser handles the user registration request
 // It parses the JSON request body, validates it, and calls the authService to register the user
-func (ah *AuthHandler) signUp(ctx *gin.Context) {
+func (ah *Handler) signUp(ctx *gin.Context) {
 	logger := logging.FromContext(ctx)
 	var requestBody dto.SignUpRequestDto
 
@@ -70,7 +70,7 @@ func (ah *AuthHandler) signUp(ctx *gin.Context) {
 		return
 	}
 
-	// Call the AuthService to register the user
+	// Call the Service to register the user
 	err := ah.authService.RegisterUser(ctx, &requestBody)
 	if err != nil {
 		if errors.Is(err, postgres.ErrKeyDuplicate) {
@@ -86,7 +86,7 @@ func (ah *AuthHandler) signUp(ctx *gin.Context) {
 
 // verifyUser handles the user verification request
 // It extracts the token from the query parameters and calls the authService to activate the user's account
-func (ah *AuthHandler) verifyUser(ctx *gin.Context) {
+func (ah *Handler) verifyUser(ctx *gin.Context) {
 	logger := logging.FromContext(ctx)
 
 	// Get the token from query parameters
@@ -98,7 +98,7 @@ func (ah *AuthHandler) verifyUser(ctx *gin.Context) {
 		return
 	}
 
-	// Call the AuthService to activate the account
+	// Call the Service to activate the account
 	id, err := ah.authService.ActivateAccount(ctx, token)
 	if err != nil {
 		if errors.Is(err, postgres.ErrRecordNotFound) {
@@ -120,14 +120,14 @@ func (ah *AuthHandler) verifyUser(ctx *gin.Context) {
 
 // reSendVerificationEmail handles the request to resend the account verification email to the user.
 // It expects the user's ID to be provided as a query parameter and performs the following steps:
-func (ah *AuthHandler) reSendVerificationEmail(ctx *gin.Context) {
-	userId, ok := ctx.GetQuery("id")
+func (ah *Handler) reSendVerificationEmail(ctx *gin.Context) {
+	userID, ok := ctx.GetQuery("id")
 	if !ok {
 		ctx.JSON(http.StatusBadRequest, apiError.ErrorResponse{Status: "failed", Message: "Missing user id", Errors: nil})
 		return
 	}
 
-	user, err := ah.authService.GetUserByID(ctx, userId)
+	user, err := ah.authService.GetUserByID(ctx, userID)
 	if err != nil {
 		if errors.Is(err, postgres.ErrRecordNotFound) {
 			ctx.JSON(http.StatusBadRequest, apiError.ErrorResponse{Status: "failed", Message: "User not found", Errors: nil})
@@ -153,7 +153,7 @@ func (ah *AuthHandler) reSendVerificationEmail(ctx *gin.Context) {
 
 // resetPassword handles the request to reset a user's password.
 // It expects a JSON body containing the user's current password and the new password.
-func (ah *AuthHandler) resetPassword(ctx *gin.Context) {
+func (ah *Handler) resetPassword(ctx *gin.Context) {
 	logger := logging.FromContext(ctx)
 	var requestBody dto.PasswordResetRequestDto
 

@@ -1,74 +1,77 @@
-# Go application variables
+# Variables
 APP_NAME := server
-MODULE_NAME := $(shell go list -m)
+GO_FILES := $(shell find . -name '*.go' -type f)
 BUILD_DIR := build
-SRC_DIR := .
-GO_FILES := $(shell find $(SRC_DIR) -name '*.go')
+BINARY := $(BUILD_DIR)/$(APP_NAME)
+MODULE := $(shell go list -m)
 
-# Docker variables
-DOCKER_IMAGE := backend-api:latest
-
-# Default target: build the Go application
+# Default target
+.PHONY: all
 all: build
 
-# Build the Go application
-build: $(BIN_DIR)/$(APP_NAME)
-
-$(BIN_DIR)/$(APP_NAME): $(GO_FILES)
-	@mkdir -p $(BIN_DIR)
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o $(BIN_DIR)/$(APP_NAME) $(MODULE_NAME)/cmd/server
-
-# Clean the binary and other build artifacts
-clean:
-	@rm -rf $(BIN_DIR)
-
-# Docker build
-docker-build:
-	docker build -t $(DOCKER_IMAGE) .
-
-# Docker Compose up
-compose-up:
-	@docker compose up -d
-
-# Docker Compose down
-compose-down:
-	@docker compose down
-
-# Lint the Go code
-lint:
-	@golangci-lint run
-
-# Format the Go code
-fmt:
-	@go fmt ./...
-
-# Detect race conditions
-race:
-	@go test -race ./...
-
-# Static code analysis
-vet:
-	@go vet ./...
-
-# Verify dependencies
-verify:
-	@go mod verify
-
-# Help message
+# Help target
+.PHONY: help
 help:
-	@echo "Usage:"
-	@echo "  make                   Build the Go application (default target)"
-	@echo "  make build             Build the Go application"
-	@echo "  make clean             Clean the binary and other build artifacts"
-	@echo "  make docker-build      Build the Docker image"
-	@echo "  make compose-up 		Start the application using Docker Compose"
-	@echo "  make compose-down 		Stop the application using Docker Compose"
-	@echo "  make lint              Lint the Go code"
-	@echo "  make fmt               Format the Go code"
-	@echo "  make race              Detect race conditions"
-	@echo "  make vet              	Run Static code analysis"
-	@echo "  make verify            Verify dependencies"
-	@echo "  make help              Show this help message"
+	@echo "Usage: make [target]"
+	@echo ""
+	@echo "Targets:"
+	@echo "  all           Build the application (default)"
+	@echo "  clean         Clean up the build directory"
+	@echo "  verify        Run dependency verification"
+	@echo "  fmt           Run go fmt on all source files"
+	@echo "  vet           Run go vet on all source files"
+	@echo "  lint          Run go lint on all source files"
+	@echo "  test          Run tests"
+	@echo "  build         Build the application"
+	@echo "  run           Run the application"
+	@echo "  validate      Run fmt, vet, lint, test, and build"
+	@echo "  docker        Build a Docker image for the application"
+	@echo "  docker-run    Run the application in a Docker container"
+	@echo "  help          Show this help message"
 
+# Clean up the build directory
+.PHONY: clean
+clean:
+	rm -rf $(BUILD_DIR)
 
-.PHONY: all build clean docker-build compose-up compose-down lint fmt race vet verify help
+# Run go fmt on all source files
+.PHONY: fmt
+fmt:
+	go fmt ./...
+
+# Run go vet on all source files
+.PHONY: vet
+vet:
+	go vet ./...
+
+# Run go dependency verification
+.PHONY: verify
+verify:
+	go mod verify
+
+# Run go lint (you need to install golint first)
+.PHONY: lint
+lint:
+	golangci-lint run ./...
+
+# Run tests
+.PHONY: test
+test:
+	go test -v ./...
+
+# Build the application
+.PHONY: build
+build: clean
+	@echo "Building $(APP_NAME)..."
+	@mkdir -p $(BUILD_DIR)
+	@go build -o $(BINARY) $(MODULE)/cmd/$(APP_NAME)
+
+# Run the application
+.PHONY: run
+run: build
+	@echo "Running $(APP_NAME)..."
+	@$(BINARY)
+
+# Run all (fmt, vet, lint, test, build)
+.PHONY: validate
+validate: fmt vet verify lint test build

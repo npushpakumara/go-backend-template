@@ -14,9 +14,11 @@ import (
 	"github.com/npushpakumara/go-backend-template/pkg/logging"
 )
 
+// identityKey is the key used to store the user identity in the JWT claims.
 var identityKey = "id"
 
-func NewAuthMiddleware(as auth.AuthService, cfg *config.Config) (*jwt.GinJWTMiddleware, error) {
+// NewAuthMiddleware creates and configures a new JWT middleware instance for handling authentication.
+func NewAuthMiddleware(as auth.Service, cfg *config.Config) (*jwt.GinJWTMiddleware, error) {
 	return jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "test zone",
 		Key:         []byte(cfg.JWT.Secret),

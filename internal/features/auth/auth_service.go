@@ -19,8 +19,8 @@ import (
 	"github.com/npushpakumara/go-backend-template/pkg/logging"
 )
 
-// AuthService defines the methods that our authentication service will implement.
-type AuthService interface {
+// Service defines the methods that our authentication service will implement.
+type Service interface {
 	// RegisterUser handles the process of registering a new user.
 	// It accepts a SignUpRequestDto containing the user's registration details and performs necessary actions such as
 	// validating the input, storing the user's data, and sending a confirmation email.
@@ -56,17 +56,17 @@ type AuthService interface {
 	HandleOAuthUser(ctx context.Context, gothUser goth.User) (*dto.OAuthResponseDto, error)
 }
 
-// authServiceImpl is a concrete implementation of the AuthService interface.
+// authServiceImpl is a concrete implementation of the Service interface.
 type authServiceImpl struct {
-	userService        user.UserService   // Service responsible for user operations
-	emailService       email.EmailService // Service responsible for sending emails
+	userService        user.Service  // Service responsible for user operations
+	emailService       email.Service // Service responsible for sending emails
 	transactionManager postgres.TransactionManager
 	cfg                *config.Config // Configuration settings for the application
 }
 
 // NewAuthService creates a new instance of authServiceImpl with the provided services and configuration.
-// This function returns an AuthService interface that uses the authServiceImpl implementation.
-func NewAuthService(userService user.UserService, emailService email.EmailService, transactionManager postgres.TransactionManager, cfg *config.Config) AuthService {
+// This function returns an Service interface that uses the authServiceImpl implementation.
+func NewAuthService(userService user.Service, emailService email.Service, transactionManager postgres.TransactionManager, cfg *config.Config) Service {
 	return &authServiceImpl{userService, emailService, transactionManager, cfg}
 }
 

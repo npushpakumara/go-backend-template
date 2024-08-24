@@ -12,13 +12,13 @@ import (
 	"github.com/npushpakumara/go-backend-template/pkg/logging"
 )
 
-// EmailService defines an interface for sending emails.
+// Service defines an interface for sending emails.
 // It provides a method to send an email with a given context and email details.
-type EmailService interface {
+type Service interface {
 	SendEmail(c context.Context, email entities.Email) error
 }
 
-// emailServiceImpl is a concrete implementation of the EmailService interface.
+// emailServiceImpl is a concrete implementation of the Service interface.
 // It uses an AWS client to send emails through AWS SES (Simple Email Service).
 type emailServiceImpl struct {
 	AWSClient *awsclient.AWSClient
@@ -26,8 +26,8 @@ type emailServiceImpl struct {
 
 // NewSESEmailService creates a new instance of emailServiceImpl.
 // It initializes the service with the given AWS client.
-// This function returns an EmailService interface that wraps the emailServiceImpl.
-func NewSESEmailService(awsClient *awsclient.AWSClient) EmailService {
+// This function returns an Service interface that wraps the emailServiceImpl.
+func NewSESEmailService(awsClient *awsclient.AWSClient) Service {
 	return &emailServiceImpl{
 		AWSClient: awsClient,
 	}
