@@ -65,7 +65,7 @@ func NewAuthMiddleware(as auth.AuthService, cfg *config.Config) (*jwt.GinJWTMidd
 			return false
 		},
 		LoginResponse: func(c *gin.Context, code int, token string, expires time.Time) {
-			c.SetCookie("access_token", token, int(expires.Sub(time.Now()).Seconds()), "/", "", false, true)
+			c.SetCookie("access_token", token, int(time.Until(expires).Seconds()), "/", "", false, true)
 			c.JSON(code, apiError.ErrorResponse{Status: "success", Message: "Login successfully"})
 		},
 		LogoutResponse: func(c *gin.Context, code int) {
@@ -74,7 +74,7 @@ func NewAuthMiddleware(as auth.AuthService, cfg *config.Config) (*jwt.GinJWTMidd
 		},
 
 		RefreshResponse: func(c *gin.Context, code int, token string, expires time.Time) {
-			c.SetCookie("access_token", token, int(expires.Sub(time.Now()).Seconds()), "/", "", false, true) // Set as HTTP-only
+			c.SetCookie("access_token", token, int(time.Until(expires).Seconds()), "/", "", false, true) // Set as HTTP-only
 			c.JSON(code, apiError.ErrorResponse{Status: "success", Message: "Token refresh successfully"})
 
 		},

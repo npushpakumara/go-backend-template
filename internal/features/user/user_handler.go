@@ -26,7 +26,6 @@ func UserRouter(configs *config.Config, router *gin.Engine, handler *UserHandler
 
 }
 
-func (uh *UserHandler) register(ctx *gin.Context) {}
 func (uh *UserHandler) getAllUsers(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, "ok")
 }

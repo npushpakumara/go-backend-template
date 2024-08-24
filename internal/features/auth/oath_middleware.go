@@ -27,9 +27,6 @@ func OAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Store the provider in the request context for later use.
-		c.Request = c.Request.WithContext(context.WithValue(c.Request.Context(), "provider", provider))
-
 		// Generate a random state string for the OAuth flow to prevent CSRF attacks.
 		state := generateStateOauthCookie()
 		// Set the state as a secure, HttpOnly cookie that expires in 5 minutes.
@@ -44,6 +41,7 @@ func OAuthMiddleware() gin.HandlerFunc {
 		// Add the state parameter to the URL query string for the OAuth request.
 		q := c.Request.URL.Query()
 		q.Add("state", state)
+		q.Add("provider", provider)
 		c.Request.URL.RawQuery = q.Encode()
 
 		gothic.BeginAuthHandler(c.Writer, c.Request)
@@ -96,7 +94,7 @@ func OAuthCallbackMiddleware(authMiddleware *jwt.GinJWTMiddleware, handleUser fu
 			return
 		}
 
-		c.SetCookie("access_token", token, int(expires.Sub(time.Now()).Seconds()), "/", "", false, true)
+		c.SetCookie("access_token", token, int(time.Until(expires).Seconds()), "/", "", false, true)
 
 		c.JSON(http.StatusOK, dto.SignUpResponseDto{Status: "success", Message: "Successfully signed in"})
 	}

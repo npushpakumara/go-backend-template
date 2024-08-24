@@ -14,10 +14,10 @@ import (
 )
 
 // contextKey is a type alias for string used to store and retrieve values from context.
-type contextKey = string
+type contextKey string
 
 // loggerKey is the key used to store the logger in the context.
-const loggerKey = contextKey("logger")
+const loggerKey contextKey = "logger"
 
 var (
 	// defaultLogger is the default logger instance for the application.
