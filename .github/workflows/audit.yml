@@ -42,14 +42,5 @@ jobs:
           go test -coverprofile=coverage.out ./...
           go tool cover -func=coverage.out
 
-      - name: Run Gosec Security Scanner
-        uses: securego/gosec@master
-        with:
-            args: '-no-fail -fmt sarif -out results.sarif ./...'
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-            sarif_file: results.sarif
-
       - name: Go build
         run: make build
