@@ -25,6 +25,9 @@ Before you begin, ensure you have met the following requirements:
 ### Project structure
 
 ```shell
+├── api
+│   └── middlewares
+|        └── auth.go
 ├── cmd
 │    └── server
 │         ├── main.go
@@ -39,6 +42,9 @@ Before you begin, ensure you have met the following requirements:
 │   │   ├── auth
 │   │   │   ├── auth_handler.go
 │   │   │   ├── auth_service.go
+│   │   │   ├── providers.go
+│   │   │   ├── auth_middleware.go
+│   │   │   ├── encoder.go
 │   │   │   ├── dto
 │   │   │   │    ├── request.go
 │   │   │   │    └── response.go
@@ -52,7 +58,6 @@ Before you begin, ensure you have met the following requirements:
 │   │       ├── dto
 │   │       │    ├── request.go
 │   │       │    └── response.go
-│   │       ├── encoder.go
 │   │       ├── entity
 │   │       │    └── user.go
 │   │       ├── user_handler.go
@@ -61,8 +66,9 @@ Before you begin, ensure you have met the following requirements:
 │   └── postgres
 │       ├── context.go
 │       ├── errors.go
-│       ├── helper.go
+│       ├── utils.go
 │       ├── logging.go
+│       ├── transactions.go
 │       └── postgres.go
 ├── pkg
 │   ├── errors
@@ -79,3 +85,21 @@ Before you begin, ensure you have met the following requirements:
 ```
 
 ### Installation
+
+```shell
+
+git clone git@github.com:npushpakumara/go-backend-template.git
+cd go-backend-template
+
+docker compose up -d
+
+```
+
+## To-do list
+
+- [] Add redis caching layer
+- [] Handle database transactions
+- [] Enhance logging capabilities
+- [] Refine the user module
+- [] Implement Role-Based Access Control (RBAC) with Casbin
+- [] Integrate GitHub Actions for CI/CD
