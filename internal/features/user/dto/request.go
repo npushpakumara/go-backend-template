@@ -12,8 +12,3 @@ type RegisterRequestDto struct {
 	Provider    string
 	ProviderID  string
 }
-
-type LoginRequestDto struct {
-	Email    string
-	Password string
-}

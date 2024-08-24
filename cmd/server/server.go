@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	middlewares "github.com/npushpakumara/go-backend-template/api/middlwares"
 	awsclient "github.com/npushpakumara/go-backend-template/internal/aws_client"
 	"github.com/npushpakumara/go-backend-template/internal/features/auth"
 	"github.com/npushpakumara/go-backend-template/internal/features/email"
@@ -64,7 +65,9 @@ func Run() {
 		fx.Provide(
 			awsclient.NewAWSClient,
 			postgres.NewDatabase,
+			postgres.NewTransactionManager,
 			email.NewSESEmailService,
+
 			// User dependencies
 			user.NewUserRepository,
 			user.NewUserService,
@@ -74,10 +77,12 @@ func Run() {
 			auth.NewAuthService,
 			auth.NewAuthHandler,
 
+			middlewares.NewAuthMiddleware,
 			newServer,
 		),
 		// Invoke functions to set up routes and start the application.
 		fx.Invoke(
+			auth.NewOAuthProviders,
 			user.UserRouter,
 			auth.AuthRouter,
 			func(r *gin.Engine) {},

@@ -20,6 +20,11 @@ type User struct {
 	ProviderID  string    `gorm:"size:100"`
 }
 
+// TableName overrides the default table name used by GORM for the User model.
+func (User) TableName() string {
+	return "auc.users"
+}
+
 // BeforeCreate is a GORM hook that is triggered before a new record is created in the database.
 // It sets the ID field to a new UUID if it hasn't been set already.
 func (user *User) BeforeCreate(tx *gorm.DB) (err error) {

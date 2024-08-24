@@ -1,11 +1,11 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"time"
 
-	"github.com/joho/godotenv"
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/providers/confmap"
 	"github.com/knadh/koanf/providers/env"
@@ -15,10 +15,11 @@ import (
 // It includes settings for the server, database, JWT, logging, and AWS services.
 type Config struct {
 	Server  ServerConfig  `json:"server"`
+	OAuth   OAuthConfig   `json:"oauth"`
 	DB      DBConfig      `json:"db"`
 	JWT     JWTConfig     `json:"jwt"`
 	Logging LoggingConfig `json:"logging"`
-	AWS     AWSConfigs    `json:"aws"`
+	AWS     AWSConfig     `json:"aws"`
 }
 
 // ServerConfig represents the configuration for the server
@@ -33,19 +34,19 @@ type ServerConfig struct {
 
 // DBConfig represents the configuration for the database
 type DBConfig struct {
-	Host     string `json:"host"`
-	Port     string `json:"port"`
-	User     string `json:"user"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
-	SSLMode  string `json:"ssl_mode"`
-	LogLevel int    `json:"log_level"`
-	Pool     struct {
+	Host       string `json:"host"`
+	Port       string `json:"port"`
+	User       string `json:"user"`
+	Password   string `json:"password"`
+	Name       string `json:"name"`
+	SSLMode    string `json:"ssl_mode"`
+	LogLevel   int    `json:"log_level"`
+	Migrations bool   `json:"migrations"`
+	Pool       struct {
 		MaxOpen     int           `json:"max_open"`
 		MaxIdle     int           `json:"max_idle"`
 		MaxLifetime time.Duration `json:"max_lifetime"`
 	} `json:"pool"`
-	MigrationEnabled bool `json:"migration_enabled"`
 }
 
 // JWTConfig represents the configuration for the JWT
@@ -62,11 +63,25 @@ type LoggingConfig struct {
 }
 
 // AWSConfigs represents the configuration for AWS services
-type AWSConfigs struct {
+type AWSConfig struct {
 	Region    string `json:"region"`
 	SESConfig struct {
 		EmailFrom string `json:"from_email"`
 	} `json:"ses"`
+}
+
+// OAuthConfig holds the configuration for multiple OAuth providers.
+type OAuthConfig struct {
+	Google    ProviderConfig `json:"google"`
+	Microsoft ProviderConfig `json:"microsoft"`
+}
+
+// ProviderConfig represents the common OAuth settings required by each provider.
+type ProviderConfig struct {
+	ClientID     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
+	RedirectURL  string `json:"redirect_url"`
+	Scopes       string `json:"scopes"`
 }
 
 var k = koanf.New(".")
@@ -74,14 +89,9 @@ var k = koanf.New(".")
 // LoadConfig loads the application configuration from environment variables and default settings.
 // It initializes configuration using a default set of values and overrides them with environment variables.
 func LoadConfig() (*Config, error) {
-	// Load environment variables from a .env file into the application
-	err := godotenv.Load()
-	if err != nil {
-		log.Printf("Cannot load .env file. err: %v, continue using system variables", err)
-	}
 
 	// Load default configuration settings
-	err = k.Load(confmap.Provider(defaultConfigs, "."), nil)
+	err := k.Load(confmap.Provider(defaultConfigs, "."), nil)
 	if err != nil {
 		log.Printf("failed to load default config. err: %v", err)
 		return nil, err
@@ -109,5 +119,13 @@ func LoadConfig() (*Config, error) {
 		return nil, err
 	}
 
+	fmt.Printf("%+v\n", cfg)
 	return &cfg, err
+}
+
+// GetScopes splits the Scopes string into a slice of individual scope strings.
+// The Scopes field is expected to be a comma-separated string, and this method
+// returns each scope as an element in a slice of strings.
+func (oauth *ProviderConfig) GetScopes() []string {
+	return strings.Split(oauth.Scopes, ",")
 }

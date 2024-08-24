@@ -70,6 +70,8 @@ func (us *userServiceImpl) UpdateUser(ctx context.Context, userId string, update
 	return nil
 }
 
+// GetUserByID retrieves a user by their ID and returns a UserResponseDto containing the user's details.
+// It first fetches the user from the repository using the user ID, then maps the user entity to a UserResponseDto.
 func (us *userServiceImpl) GetUserByID(ctx context.Context, userID string) (*dto.UserResponseDto, error) {
 	user, err := us.userRepository.FindByID(ctx, userID)
 	if err != nil {
@@ -87,6 +89,8 @@ func (us *userServiceImpl) GetUserByID(ctx context.Context, userID string) (*dto
 	return userDto, nil
 }
 
+// GetUserByEmail retrieves a user by their email and returns a UserResponseDto containing the user's details.
+// It first fetches the user from the repository using the email, then maps the user entity to a UserResponseDto.
 func (us *userServiceImpl) GetUserByEmail(ctx context.Context, email string) (*dto.UserResponseDto, error) {
 	user, err := us.userRepository.FindByEmail(ctx, email)
 	if err != nil {

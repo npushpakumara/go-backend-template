@@ -58,8 +58,13 @@ func NewDatabase(cfg *config.Config) (*gorm.DB, error) {
 	pgDB.SetMaxIdleConns(cfg.DB.Pool.MaxIdle)        // Maximum number of idle connections in the pool
 	pgDB.SetConnMaxLifetime(cfg.DB.Pool.MaxLifetime) // Maximum lifetime of a connection before it is reused
 
+	err = db.Exec("CREATE SCHEMA IF NOT EXISTS auc").Error
+	if err != nil {
+		return nil, err
+	}
+
 	// If database migration is enabled, run migrations
-	if cfg.DB.MigrationEnabled {
+	if cfg.DB.Migrations {
 		// Call the migrateDB function to apply migrations
 		err := migrateAndSeed(db)
 		if err != nil {
