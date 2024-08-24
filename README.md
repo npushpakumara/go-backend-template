@@ -113,6 +113,6 @@ make compose-up
 - [ ] Enhance logging capabilities
 - [ ] Refine the user module
 - [ ] Implement Role-Based Access Control (RBAC) with Casbin
-- [ ] Integrate GitHub Actions for CI/CD
+- [x] Add GitHub Actions for CI/CD
 - [ ] Implement unit and integration test
 - [ ] Add prometheus metrics
