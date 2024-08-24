@@ -27,11 +27,11 @@ docker-build:
 	docker build -t $(DOCKER_IMAGE) .
 
 # Docker Compose up
-docker-compose-up:
+compose-up:
 	@docker compose up -d
 
 # Docker Compose down
-docker-compose-down:
+compose-down:
 	@docker compose down
 
 # Lint the Go code
@@ -46,6 +46,14 @@ fmt:
 race:
 	@go test -race ./...
 
+# Static code analysis
+vet:
+	@go vet ./...
+
+# Verify dependencies
+verify:
+	@go mod verify
+
 # Help message
 help:
 	@echo "Usage:"
@@ -53,11 +61,14 @@ help:
 	@echo "  make build             Build the Go application"
 	@echo "  make clean             Clean the binary and other build artifacts"
 	@echo "  make docker-build      Build the Docker image"
-	@echo "  make docker-compose-up Start the application using Docker Compose"
-	@echo "  make docker-compose-down Stop the application using Docker Compose"
+	@echo "  make compose-up 		Start the application using Docker Compose"
+	@echo "  make compose-down 		Stop the application using Docker Compose"
 	@echo "  make lint              Lint the Go code"
 	@echo "  make fmt               Format the Go code"
 	@echo "  make race              Detect race conditions"
+	@echo "  make vet              	Run Static code analysis"
+	@echo "  make verify            Verify dependencies"
 	@echo "  make help              Show this help message"
 
-.PHONY: all build clean docker-build docker-compose-up docker-compose-down lint fmt race help
+
+.PHONY: all build clean docker-build compose-up compose-down lint fmt race vet verify help

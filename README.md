@@ -1,3 +1,8 @@
+![CI](https://github.com/npushpakumara/go-backend-template/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/npushpakumara/go-backend-template/badge.svg?branch=main)](https://coveralls.io/github/yourusername/your-repo?branch=main)
+[![Go Report Card](https://goreportcard.com/badge/github.com/npushpakumara/go-backend-template)](https://goreportcard.com/report/github.com/npushpakumara/go-backend-template)
+
+
 # Go Backend API template
 
 A clean architecture Go backend template built with Gin, PostgreSQL, GORM, and Uber FX. This project provides a robust starting point for building scalable and maintainable Go applications.
@@ -26,8 +31,8 @@ Before you begin, ensure you have met the following requirements:
 
 ```shell
 ├── api
-│   └── middlewares
-|        └── auth.go
+│    └── middlewares
+│        └── auth.go
 ├── cmd
 │    └── server
 │         ├── main.go
@@ -37,7 +42,8 @@ Before you begin, ensure you have met the following requirements:
 │   │    └── aws_client.go
 │   ├── config
 │   │    ├── config.go
-│   │    └── default.go
+│   │    ├── default.go
+│   │    └── README.md
 │   ├── features
 │   │   ├── auth
 │   │   │   ├── auth_handler.go
@@ -86,20 +92,27 @@ Before you begin, ensure you have met the following requirements:
 
 ### Installation
 
-```shell
+Refer to `config/default.go` for guidance on setting up environment variables.
 
+```shell
+# Clone the project
 git clone git@github.com:npushpakumara/go-backend-template.git
 cd go-backend-template
 
-docker compose up -d
+# Build docker image
+make docker-build
 
+# Run docker compose with postgres
+make compose-up
 ```
 
 ## To-do list
 
-- [] Add redis caching layer
-- [] Handle database transactions
-- [] Enhance logging capabilities
-- [] Refine the user module
-- [] Implement Role-Based Access Control (RBAC) with Casbin
-- [] Integrate GitHub Actions for CI/CD
+- [ ] Add redis caching layer
+- [ ] Handle database transactions
+- [ ] Enhance logging capabilities
+- [ ] Refine the user module
+- [ ] Implement Role-Based Access Control (RBAC) with Casbin
+- [ ] Integrate GitHub Actions for CI/CD
+- [ ] Implement unit and integration test
+- [ ] Add prometheus metrics
