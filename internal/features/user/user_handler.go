@@ -35,5 +35,5 @@ func Router(configs *config.Config, router *gin.Engine, handler *Handler, authMi
 
 // getAllUsers is a handler method for the Handler struct.
 func (uh *Handler) getAllUsers(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, "ok")
+ctx.JSON(http.StatusOK, "ok")
 }
