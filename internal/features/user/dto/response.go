@@ -9,8 +9,11 @@ type UserResponseDto struct {
 	FirstName   string
 	LastName    string
 	Email       string
+	Password    string
 	PhoneNumber string
 	IsActive    bool
+	Provider    string
+	ProviderID  string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }

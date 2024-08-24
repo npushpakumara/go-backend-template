@@ -16,6 +16,13 @@ type User struct {
 	Password    string    `gorm:"size:255"`
 	PhoneNumber string    `gorm:"size:20"`
 	IsActive    bool      `gorm:"type:boolean"`
+	Provider    string    `gorm:"size:20"`
+	ProviderID  string    `gorm:"size:100"`
+}
+
+// TableName overrides the default table name used by GORM for the User model.
+func (User) TableName() string {
+	return "auc.users"
 }
 
 // BeforeCreate is a GORM hook that is triggered before a new record is created in the database.

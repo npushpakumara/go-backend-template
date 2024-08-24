@@ -26,8 +26,40 @@ var defaultConfigs = map[string]interface{}{
 	"server.graceful_shutdown": "30s",
 
 	// server.domain specifies the domain on which the server is accessible.
-	// Default value is "http://localhost".
-	"server.domain": "http://localhost",
+	// Default value is "http://localhost:4000".
+	"server.domain": "http://localhost:4000",
+
+	// Google OAuth configuration
+	// The Client ID for the Google OAuth application.
+	//This is used to identify your app when making OAuth requests.
+	"oauth.google.client_id": "client-id",
+
+	// The Client Secret for the Google OAuth application.
+	//This is used to authenticate your app with Google.
+	"oauth.google.client_secret": "secret",
+
+	// The URL where users will be redirected after successfully authenticating with Google.
+	"oauth.google.redirect_url": "http://localhost:4000/api/v1/oauth/google/callback",
+
+	// The scopes specify the permissions your app is requesting.
+	//'email' gives access to the user's email, and 'profile' gives access to basic profile information.
+	"oauth.google.scopes": "email,profile",
+
+	// Microsoft OAuth configuration
+	// The Client ID for the Microsoft OAuth application.
+	//This is used to identify your app when making OAuth requests.
+	"oauth.microsoft.client_id": "client-id",
+
+	// The Client Secret for the Microsoft OAuth application.
+	//This is used to authenticate your app with Microsoft.
+	"oauth.microsoft.client_secret": "secret",
+
+	// The URL where users will be redirected after successfully authenticating with Microsoft.
+	"oauth.microsoft.redirect_url": "http://localhost:4000/api/v1/oauth/microsoft/callback",
+
+	// The scopes specify the permissions your app is requesting.
+	//'User.Read' gives access to the user's profile data, and 'openid' is used for authentication.
+	"oauth.microsoft.scopes": "User.Read,openid",
 
 	// db.host indicates the hostname or IP address of the database server.
 	// Default value is "localhost".
@@ -43,7 +75,7 @@ var defaultConfigs = map[string]interface{}{
 
 	// db.pass represents the password used for authentication with the database server.
 	// Default value is "root".
-	"db.pass": "root",
+	"db.password": "root",
 
 	// db.name is the name of the database to which the application will connect.
 	// Default value is "test".
@@ -51,7 +83,7 @@ var defaultConfigs = map[string]interface{}{
 
 	// db.migration_enabled is a boolean flag that determines whether database migrations should be applied automatically on application startup.
 	// Default value is false.
-	"db.migration_enabled": false,
+	"db.migrations": false,
 
 	// db.log_level sets the level of logging for database operations.
 	// Default value is 2.

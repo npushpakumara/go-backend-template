@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// UserRepository defines the interface for user-related data operations.
+// / UserRepository defines the interface for user-related data operations.
 type UserRepository interface {
 	// Insert adds a new user to the database.
 	// It returns the inserted user and an error if something goes wrong.
@@ -66,7 +66,7 @@ func (us *userRepositoryImpl) FindByEmail(ctx context.Context, email string) (*e
 
 	logger.Debugw("user.db.FindByEmail", "email", email)
 
-	var user *entity.User
+	var user entity.User
 	if err := db.WithContext(ctx).First(&user, "email = ?", email).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			logger.Warn("user.db.FindByEmail user not found")
@@ -75,7 +75,7 @@ func (us *userRepositoryImpl) FindByEmail(ctx context.Context, email string) (*e
 		logger.Errorw("user.db.FindByEmail failed to find user: %v", err)
 		return nil, err
 	}
-	return user, nil
+	return &user, nil
 }
 
 // FindByID retrieves a user based on their ID.
@@ -86,7 +86,7 @@ func (us *userRepositoryImpl) FindByID(ctx context.Context, id string) (*entity.
 
 	logger.Debugw("user.db.FindByID", "id", id)
 
-	var user *entity.User
+	var user entity.User
 	if err := db.WithContext(ctx).First(&user, "id = ?", id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			logger.Warn("user.db.FindByID user not found")
@@ -95,7 +95,7 @@ func (us *userRepositoryImpl) FindByID(ctx context.Context, id string) (*entity.
 		logger.Errorw("user.db.FindByID failed to find user: %v", err)
 		return nil, err
 	}
-	return user, nil
+	return &user, nil
 }
 
 // Update modifies an existing user's details based on their ID.
@@ -106,7 +106,7 @@ func (us *userRepositoryImpl) Update(ctx context.Context, id string, updates map
 
 	logger.Debugw("user.db.Update", id, updates)
 
-	var user *entity.User
+	var user entity.User
 	if err := db.WithContext(ctx).Model(&user).Clauses(clause.Returning{}).Where("id = ?", id).Updates(updates).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			logger.Warn("user.db.Update user not found")

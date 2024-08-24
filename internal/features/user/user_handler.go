@@ -3,6 +3,7 @@ package user
 import (
 	"net/http"
 
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/npushpakumara/go-backend-template/internal/config"
 )
@@ -15,12 +16,11 @@ func NewUserHandler(userService UserService) *UserHandler {
 	return &UserHandler{userService}
 }
 
-func UserRouter(configs *config.Config, router *gin.Engine, handler *UserHandler) {
+func UserRouter(configs *config.Config, router *gin.Engine, handler *UserHandler, authMiddleware *jwt.GinJWTMiddleware) {
 	v1 := router.Group("api/v1")
 
-	v1.Use()
+	v1.Use(authMiddleware.MiddlewareFunc())
 	{
-		v1.POST("/users", handler.register)
 		v1.GET("/users", handler.getAllUsers)
 	}
 

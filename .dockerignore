@@ -1,0 +1,53 @@
+# Binaries and build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+*.out
+*.a
+
+# Dependency directories (if you use Go modules, you might not need this)
+vendor/
+
+# Test binaries
+*.test
+
+# Logs and traces
+*.log
+*.trace
+
+# Temporary files and directories
+*.tmp
+*.swp
+*.swo
+*~
+tmp/
+out/
+build/
+
+# IDE and editor-specific files
+.vscode/
+.idea/
+*.iml
+*.code-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Docker-related files
+Dockerfile
+docker-compose*.yml
+
+# Git-specific files
+.git
+.gitignore
+
+# Environment files
+.env*
+
+# Database files (if any)
+*.db
+
+# Configuration files (if you don't want to include them)
+#configs/
