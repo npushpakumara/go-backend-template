@@ -66,7 +66,7 @@ func Run() {
 			awsclient.NewAWSClient,
 			postgres.NewDatabase,
 			postgres.NewTransactionManager,
-			email.NewSESEmailService,
+			email.NewEmailService,
 
 			// User dependencies
 			user.NewUserRepository,

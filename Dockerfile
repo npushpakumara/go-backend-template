@@ -30,6 +30,9 @@ WORKDIR /app
 # Copy the compiled binary from the builder stage
 COPY --from=builder /app/bin/server .
 
+# Copy the templates to the final image
+COPY --from=builder /app/internal/features/email/templates /app/internal/features/email/templates
+
 # Use a non-root user for security reasons
 USER nonroot:nonroot
 

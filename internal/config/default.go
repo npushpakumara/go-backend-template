@@ -125,7 +125,26 @@ var defaultConfigs = map[string]interface{}{
 	// Default value is "eu-west-2".
 	"aws.region": "eu-west-2",
 
-	// aws.ses.from_email represents the default sender email address for AWS Simple Email Service (SES).
-	// Default value is "example.com".
-	"aws.ses.from_email": "example.com",
+	// mail.provider specifies the email service provider.
+	// Valid values are "smtp" or "ses"
+	"mail.provider": "smtp",
+
+	// mail.from_email address that will be used when sending emails.
+	// This should be a valid email address.
+	"mail.from_email": "example@gmail.com",
+
+	// mail.smtp.server address used for sending emails.
+	// In this case, it is set to Gmail's SMTP server.
+	"mail.smtp.server": "smtp.gmail.com",
+
+	// mail.smtp.port is typically used for SMTP over SSL (secure email transmission).
+	"mail.smtp.port": 587,
+
+	// mail.smtp.username for authenticating with the SMTP server.
+	// Usually, this is the email address being used to send emails.
+	"mail.smtp.username": "example@gmail.com",
+
+	// mail.smtp.password for authenticating with the SMTP server.
+	// This should be kept secret and secure.
+	"mail.smtp.password": "password",
 }

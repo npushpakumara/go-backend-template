@@ -25,8 +25,9 @@ help:
 	@echo "  build         Build the application"
 	@echo "  run           Run the application"
 	@echo "  validate      Run fmt, vet, lint, test, and build"
-	@echo "  docker        Build a Docker image for the application"
-	@echo "  docker-run    Run the application in a Docker container"
+	@echo "  docker-build  Build a Docker image for the application"
+	@echo "  compose-up    Run the application in a Docker container"
+	@echo "  compose-down  Remove the docker containers"
 	@echo "  help          Show this help message"
 
 # Clean up the build directory
@@ -75,3 +76,21 @@ run: build
 # Run all (fmt, vet, lint, test, build)
 .PHONY: validate
 validate: fmt vet verify lint test build
+
+# Build docker image
+.PHONY: docker-build
+docker-build:
+	@echo "Running docker build"
+	@docker build -t $(APP_NAME) .
+
+# Running docker-compose
+.PHONY: compose-up
+compose-up:
+	@echo "Running docker-compose"
+	@docker compose up -d
+
+# Removing docker containers
+.PHONY: compose-down
+compose-down:
+	@echo "Removing docker containers"
+	@docker compose down

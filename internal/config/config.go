@@ -20,6 +20,7 @@ type Config struct {
 	JWT     JWTConfig     `json:"jwt"`
 	Logging LoggingConfig `json:"logging"`
 	AWS     AWSConfig     `json:"aws"`
+	Mail    MailConfig    `json:"mail"`
 }
 
 // ServerConfig represents the configuration for the server
@@ -64,10 +65,7 @@ type LoggingConfig struct {
 
 // AWSConfig represents the configuration for AWS services
 type AWSConfig struct {
-	Region    string `json:"region"`
-	SESConfig struct {
-		EmailFrom string `json:"from_email"`
-	} `json:"ses"`
+	Region string `json:"region"`
 }
 
 // OAuthConfig holds the configuration for multiple OAuth providers.
@@ -82,6 +80,18 @@ type ProviderConfig struct {
 	ClientSecret string `json:"client_secret"`
 	RedirectURL  string `json:"redirect_url"`
 	Scopes       string `json:"scopes"`
+}
+
+// MailConfig represents the email settings.
+type MailConfig struct {
+	SMTP struct {
+		Server   string `json:"server"`
+		Port     int    `json:"port"`
+		Username string `json:"username"`
+		Password string `json:"password"`
+	} `json:"smtp"`
+	FromEmail string `json:"from_email"`
+	Provider  string `json:"provider"`
 }
 
 var k = koanf.New(".")
