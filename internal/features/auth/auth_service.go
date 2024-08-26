@@ -159,16 +159,23 @@ func (as *authServiceImpl) SendAccountVerificationEmail(ctx context.Context, req
 		return err // Return error if token creation fails.
 	}
 
+	mailData := &entities.VerificationEmailData{
+		Name: requestBody.FirstName,
+		Link: fmt.Sprintf("%s/api/v1/auth/verify?token=%s", as.cfg.Server.Domain, tokenString),
+	}
+
+	mailBody, err := email.ParseTemplate(entities.EmailTemplates["UserVerification"].Template, mailData)
+	if err != nil {
+		logger.Errorw("auth.service.sendAccountVerificationEmail failed to parse email template: %v", err)
+		return err
+	}
+
 	// Prepare the email content.
 	newEmail := &entities.Email{
-		To:       []string{requestBody.Email},
-		From:     as.cfg.AWS.SESConfig.EmailFrom,
-		Subject:  entities.EmailTemplates["UserVerification"].Subject,
-		Template: entities.EmailTemplates["UserVerification"].Template,
-		Data: map[string]string{
-			"name": requestBody.FirstName,
-			"url":  fmt.Sprintf("%s/api/v1/auth/verify?token=%s", as.cfg.Server.Domain, tokenString),
-		},
+		To:      []string{requestBody.Email},
+		From:    as.cfg.Mail.FromEmail,
+		Subject: entities.EmailTemplates["UserVerification"].Subject,
+		Data:    mailBody,
 	}
 
 	// Send the verification email using the email service.

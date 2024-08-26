@@ -1,7 +1,5 @@
-![CI](https://github.com/npushpakumara/go-backend-template/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/npushpakumara/go-backend-template/badge.svg?branch=main)](https://coveralls.io/github/yourusername/your-repo?branch=main)
+![CI](https://github.com/npushpakumara/go-backend-template/actions/workflows/audit.yml/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/npushpakumara/go-backend-template)](https://goreportcard.com/report/github.com/npushpakumara/go-backend-template)
-
 
 # Go Backend API template
 
@@ -14,7 +12,7 @@ A clean architecture Go backend template built with Gin, PostgreSQL, GORM, and U
 - PostgreSQL database with Gorm ORM
 - Dependency injection with Uber FX
 - Docker support for easy containerization
-- Sending emails using AWS SES
+- Sending emails using AWS SES and SMTP
 - Oauth implementation with Goth
 
 ## Getting Started
@@ -109,10 +107,10 @@ make compose-up
 ## To-do list
 
 - [ ] Add redis caching layer
-- [ ] Handle database transactions
+- [ ] Handle database transactions efficiently
 - [ ] Enhance logging capabilities
 - [ ] Refine the user module
 - [ ] Implement Role-Based Access Control (RBAC) with Casbin
-- [x] Add GitHub Actions for CI/CD
+- [x] Add GitHub Actions auditing
 - [ ] Implement unit and integration test
 - [ ] Add prometheus metrics
